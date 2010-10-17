@@ -5,6 +5,9 @@ SHIC_HOST="irc.freenode.net"
 SHIC_PORT=6667
 SHIC_NICK="$USER"
 SHIC_PASS=""
+# Automatically execute these inputs at startup, separated by ;
+# e.g: SHIC_SCRIPT=":j #archlinux; Heya all!; :s;
+SHIC_SCRIPT=""
 # Red error, green background for private message, cyan for #archlinux,
 # white for conversations in and out, and gray for everything else
 SHIC_PREFIX=(
@@ -106,6 +109,14 @@ exec 3<>/dev/tcp/$SHIC_HOST/$SHIC_PORT || exit 1
 [[ $SHIC_PASS ]] && _send "PASS $SHIC_PASS"
 _send "NICK $SHIC_NICK"
 _send "USER $SHIC_NICK localhost $SHIC_HOST :$SHIC_NICK"
+
+function _trim() { echo $1; }
+
+# Execute login script
+IFS=";" read -ra C <<< "$SHIC_SCRIPT"
+for _cmd in "${C[@]}"; do
+    _input $(_trim "$_cmd")
+done
 
 # Handle input
 while read line; do

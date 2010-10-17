@@ -1,6 +1,6 @@
 # shic - SHellscript Irc Client
 
-`shic` is a simple IRC client written in pure BASH. It is inspired by [sic](http://tools.suckless.org/sic). `shic` supports coloring and configuration files.
+`shic` is a simple IRC client written in pure BASH. It is inspired by [sic](http://tools.suckless.org/sic). `shic` supports coloring, configuration files and automatic execution of commands.
 
 `shic` came to be as a learning excercise of BASH. The design principles are:
 
@@ -23,11 +23,13 @@ Besides giving `shic` command line options, configuration can be stored in a sep
 
 Below is and example of a valid configuration file, here set with the defaults
 
-
     SHIC_HOST="irc.freenode.net"
     SHIC_PORT=6667
     SHIC_NICK="$USER"
     SHIC_PASS=""
+    # Automatically execute these inputs at startup, separated by ;
+    # e.g: SHIC_SCRIPT=":j #archlinux; Heya all!; :s;
+    SHIC_SCRIPT=""
     # Red error, green background for private message, cyan for #archlinux,
     # white for conversations in and out, and gray for everything else
     SHIC_PREFIX=(
