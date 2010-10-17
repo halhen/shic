@@ -51,7 +51,7 @@ function _input() {
     if [[ ${#line} == 2 || ${line:2:1} == " " ]]; then
         _txt="${line:3}"
         case ${line:1:1} in
-            m ) read -r _to _msg <<< "$_txt" && _send "PRIVMSG $_to :$_msg"; return;;
+            m ) read -r _to _msg <<< "$_txt" && _send "PRIVMSG $_to :$_msg" && _output "-> $_to> $_msg"; return;;
             l ) _send "PART :$_txt"; return;;
             j ) _send "JOIN $_txt"; [[ -z $channel ]] && channel=$_txt; return;;
             s ) channel="$_txt";  return;;
