@@ -74,4 +74,4 @@ No warranties. Sorry.
 SHellscript Irc Tool? Seriously, though: use it if you want to.
 
 ### This client is *the* shit
-Glad you like it. Make me happy by telling mig. I'm occasionally at Freenode as halhen. Try `:m halhen Hey man. shic is chic!`. Or [send me an e-mail](mailto:halhen@k2h.se).
+Glad you like it. Make me happy by telling me. I'm occasionally at Freenode as halhen. Try `:m halhen Hey man. shic is chic!`. Or [send me an e-mail](mailto:halhen@k2h.se).
