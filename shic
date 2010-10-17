@@ -17,7 +17,7 @@ SHIC_PREFIX=(
 )
 
 # Don't exit at Ctrl-C
-trap "" SIGINT
+trap "echo" SIGINT
 
 # Clean up children at exit
 trap "kill 0" EXIT
