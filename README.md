@@ -28,11 +28,15 @@ Below is and example of a valid configuration file, here set with the defaults
     SHIC_PORT=6667
     SHIC_NICK="$USER"
     SHIC_PASS=""
+    # Red error, green background for private message, cyan for #archlinux,
+    # white for conversations in and out, and gray for everything else
     SHIC_PREFIX=(
-        "\e[0;31m::^ERROR"
-        "\e[0;32m::(^<[^@]*@[^#])"
-        "\e[1;33m::^<"
-        "\e[1;33m::^->"
+        "\e[31m::^ERROR"
+        "\e[42m\e[30m::(^<[^@]*@[^#])"
+        "\e[36m::#archlinux"
+        "\e[0m::^<"
+        "\e[0m::^->"
+        "\e[1;30m::(.*)"
     )
 
 `SHIC_PREFIX` is an array of prefix::regexp pairs. If an output line matches regexp (through the BASH `=~` operator), prefix will be printed before the line. This is best used to set different colors for different messages. *Gotcha/known bug: spaces are not allowed in the regexp.*
