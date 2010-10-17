@@ -8,8 +8,9 @@ SHIC_PASS=""
 SHIC_PREFIX=(
     "\e[0;31m::^ERROR"
     "\e[0;32m::(^<[^@]*@[^#])"
-    "\e[1;33m::^<"
-    "\e[1;33m::^->"
+    "\e[0;33m::#archlinux"
+    "\e[0;36m::^<"
+    "\e[0;36m::^->"
 )
 
 # Don't exit at Ctrl-C
