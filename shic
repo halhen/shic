@@ -18,12 +18,6 @@ trap "" SIGINT
 # Clean up children at exit
 trap "kill 0" EXIT
 
-# Print error message and exit
-function _fatal() {
-    echo "Fatal: $*" >&2
-    exit 1
-}
-
 # Send raw message to server
 function _send() {
     echo -e "$*\r\n" >&3
@@ -43,14 +37,11 @@ function _output() {
 function _input() {
     local line="$*"
     if [[ "${line:0:1}" != ":" ]]; then
-        if [[ -z $channel ]]; then
-            _output "ERROR: No channel to send to"
-            return 1
-        fi
+        [[ -z $channel ]] && _output "ERROR: No channel to send to" && return
 
         _send "PRIVMSG $channel :$line"
         _output "-> $channel> $line"
-        return 0
+        return
     fi
 
     if [[ ${#line} == 2 || ${line:2:1} == " " ]]; then
@@ -60,7 +51,7 @@ function _input() {
             l ) _send "PART :$_txt"; return;;
             j ) _send "JOIN $_txt"; [[ -z $channel ]] && channel=$_txt; return;;
             s ) channel="$_txt";  return;;
-            q ) _send "QUIT :$s_txt"; exit 0;;
+            q ) _send "QUIT"; exit 0;;
         esac
     fi
 
@@ -71,18 +62,18 @@ function _input() {
 # Parse command line
 while getopts "h:p:n:k:c:v" flag; do
     case $flag in
-        v) echo "shic v. 0.1, (c) 2010 Henrik Hallberg"; exit;;
+        v) echo "shic v. 0.1, by halhen. Released to the public domain."; exit;;
         h) SHIC_HOST="$OPTARG";;
         p) SHIC_PORT="$OPTARG";;
         n) SHIC_NICK="$OPTARG";;
         k) SHIC_PASS="$OPTARG";;
         c) source "$OPTARG";;
-        ?) _fatal "Unknown option. Usage: $0 [-h hostname] [-p port] [-n nick] [-k password] [-c configfile] [-v]";;
+        ?) echo "Unknown option. Usage: $0 [-h hostname] [-p port] [-n nick] [-k password] [-c configfile] [-v]" >&2; exit 1;;
     esac
 done
 
 # Open connection to server
-exec 3<>/dev/tcp/$SHIC_HOST/$SHIC_PORT || _fatal "Could not connect to $SHIC_HOST:$SHIC_PORT"
+exec 3<>/dev/tcp/$SHIC_HOST/$SHIC_PORT || exit 1
 
 # Handle messages from server
 # This runs as a separate process, which means that no variables are shared with 
@@ -107,7 +98,7 @@ exec 3<>/dev/tcp/$SHIC_HOST/$SHIC_PORT || _fatal "Could not connect to $SHIC_HOS
     done
 } <&3 &
 
-# Do what the protocol requires
+# Introduce myself
 [[ $SHIC_PASS ]] && _send "PASS $SHIC_PASS"
 _send "NICK $SHIC_NICK"
 _send "USER $SHIC_NICK localhost $SHIC_HOST :$SHIC_NICK"
