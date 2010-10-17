@@ -27,22 +27,22 @@ trap "kill 0" EXIT
 
 # Send raw message to server
 function _send() {
-    echo -e "$*\r\n" >&3
+    echo -e "$@\r\n" >&3
 }
 
 # Print for user
 function _output() {
     _prefix=""
     for rule in ${SHIC_PREFIX[@]}; do
-        [[ "$*" =~ ${rule#*::} ]] && _prefix="${rule%%::*}$_prefix"
+        [[ "$@" =~ ${rule#*::} ]] && _prefix="${rule%%::*}$_prefix"
     done
 
-    echo -e "$_prefix$*\e[0m"
+    echo -e "$_prefix$@\e[0m"
 }
 
 # Handle user input
 function _input() {
-    local line="$*"
+    local line="$@"
     if [[ "${line:0:1}" != ":" ]]; then
         [[ -z $channel ]] && _output "ERROR: No channel to send to" && return
 
