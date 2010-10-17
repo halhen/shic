@@ -5,7 +5,7 @@ SHIC_HOST="irc.freenode.net"
 SHIC_PORT=6667
 SHIC_NICK="$USER"
 SHIC_PASS=""
-SHIC_COLORS=(
+SHIC_PREFIX=(
     "\e[0;31m::^ERROR"
     "\e[0;32m::(^<[^@]*@[^#])"
     "\e[1;33m::^<"
@@ -24,39 +24,19 @@ function _fatal() {
     exit 1
 }
 
-
-# Handle message from server
-# This runs as a separate process, which means that no variables are shared with 
-# the input process. For better or for worse. Mostly for worse.
-function _recv() {
-    while read _line
-    do
-        # Remove source if present
-        _source=""
-        [[ ${_line:0:1} == ":" ]] && _source="${_line%% *}" && _line="${_line#* }"
-        _source="${_source:1}"
-        _user=${_source%%\!*}
-        _txt="${_line#*:}"
-
-        case "${_line%% *}" in
-            "PING")
-                _send "PONG" 
-                ;;
-            "PRIVMSG")
-                _ch="${_line%% :*}"
-                _ch="${_ch#* }"
-                _output "<$_user@$_ch> $_txt"
-                ;;
-            *)
-                _output "$_source >< $_line"
-                ;;
-        esac
-    done
-}
-
 # Send raw message to server
 function _send() {
     echo -e "$*\r\n" >&3
+}
+
+# Print for user
+function _output() {
+    _prefix=""
+    for rule in ${SHIC_PREFIX[@]}; do
+        [[ "$*" =~ ${rule#*::} ]] && _prefix="${rule%%::*}$_prefix"
+    done
+
+    echo -e "$_prefix$*\e[0m"
 }
 
 # Handle user input
@@ -73,13 +53,14 @@ function _input() {
         return 0
     fi
 
-    if [[ ${line:2:1} == " " ]]; then
+    if [[ ${#line} == 2 || ${line:2:1} == " " ]]; then
         _txt="${line:3}"
         case ${line:1:1} in
             m ) read -r _to _msg <<< "$_txt" && _send "PRIVMSG $_to :$_msg"; return;;
             l ) _send "PART :$_txt"; return;;
             j ) _send "JOIN $_txt"; [[ -z $channel ]] && channel=$_txt; return;;
             s ) channel="$_txt";  return;;
+            q ) _send "QUIT :$s_txt"; exit 0;;
         esac
     fi
 
@@ -87,23 +68,8 @@ function _input() {
     _send "${line:1}"
 }
 
-# Print for user
-function _output() {
-    line="$*"
-
-    # Apply coloring rules
-    _color=""
-    for rule in ${SHIC_COLORS[@]}; do
-        [[ "$line" =~ ${rule#*::} ]] && _color="${rule%%::*}$_color"
-    done
-
-    echo -e "$_color$line\e[0m"
-}
-
-
 # Parse command line
-while getopts "h:p:n:k:c:v" flag
-do
+while getopts "h:p:n:k:c:v" flag; do
     case $flag in
         v) echo "shic v. 0.1, (c) 2010 Henrik Hallberg"; exit;;
         h) SHIC_HOST="$OPTARG";;
@@ -118,15 +84,35 @@ done
 # Open connection to server
 exec 3<>/dev/tcp/$SHIC_HOST/$SHIC_PORT || _fatal "Could not connect to $SHIC_HOST:$SHIC_PORT"
 
-# Read messages from server
-_recv <&3 &
+# Handle messages from server
+# This runs as a separate process, which means that no variables are shared with 
+# the input process. For better or for worse. Mostly for worse.
+{
+    while read _line; do
+        [[ ${_line:0:1} == ":" ]] && _source="${_line%% *}" && _line="${_line#* }"
+        _source="${_source:1}"
+        _user=${_source%%\!*}
+        _txt="${_line#*:}"
+
+        case "${_line%% *}" in
+            "PING")
+                _send "PONG" ;;
+            "PRIVMSG")
+                _ch="${_line%% :*}"
+                _ch="${_ch#* }"
+                _output "<$_user@$_ch> $_txt" ;;
+            *)
+                _output "$_source >< $_line" ;;
+        esac
+    done
+} <&3 &
 
 # Do what the protocol requires
 [[ $SHIC_PASS ]] && _send "PASS $SHIC_PASS"
 _send "NICK $SHIC_NICK"
 _send "USER $SHIC_NICK localhost $SHIC_HOST :$SHIC_NICK"
 
-while read line
-do
+# Handle input
+while read line; do
     _input "$line"
 done
