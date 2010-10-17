@@ -52,6 +52,27 @@ All messages are sent to the current channel (set using `:s`, see below). All in
 * `:s #channel/user` - set #channel or user as the current channel
 * `:q` - exit
 
+## Screenshot
+shic running in the left window with the config below. Green text is me talking, green background is someone mentioning my nick. Cyan is #archlinux, yellow is #python and white is #bash, or me typing. Gray are status messages and the like.
+
+    SHIC_HOST="irc.freenode.net"
+    SHIC_PORT=6667
+    SHIC_NICK="halhen"
+    SHIC_PASS=""
+    SHIC_SCRIPT=":j #archlinux; :j #python; :s;"
+    SHIC_PREFIX=(
+        "\e[31m::^ERROR"
+        "\e[42m\e[30m::(^<[^@]*@[^#])"
+        "\e[42m\e[30m::(^<.*$SHIC_NICK)"
+        "\e[32m::^->"
+        "\e[36m::#archlinux>"
+        "\e[33m::#python>"
+        "\e[0m::^<"
+        "\e[1;30m::(.*)"
+    )
+
+![screenshot](http://imgur.com/ICwz2.jpg)
+
 ## FAQ
 
 ### How is shic licensed?
