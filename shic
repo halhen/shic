@@ -62,7 +62,7 @@ function _input() {
 # Parse command line
 while getopts "h:p:n:k:c:v" flag; do
     case $flag in
-        v) echo "shic v. 0.1, by halhen. Released to the public domain."; exit;;
+        v) echo -e "shic v. 0.1, by halhen. Released to the public domain.\nSee http://github.com/halhen/shic for help."; exit;;
         h) SHIC_HOST="$OPTARG";;
         p) SHIC_PORT="$OPTARG";;
         n) SHIC_NICK="$OPTARG";;
