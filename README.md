@@ -53,7 +53,7 @@ All messages are sent to the current channel (set using `:s`, see below). All in
 * `:q` - exit
 
 ## Screenshot
-shic running in the left window with the config below. Green text is me talking, green background is someone mentioning my nick. Cyan is #archlinux, yellow is #python and white is #bash, or me typing. Gray are status messages and the like.
+shic [running in the left window](http://imgur.com/ICwz2.jpg) with the config below. Green text is me talking, green background is someone mentioning my nick. Cyan is #archlinux, yellow is #python and white is #bash, or me typing. Gray are status messages and the like.
 
     SHIC_HOST="irc.freenode.net"
     SHIC_PORT=6667
