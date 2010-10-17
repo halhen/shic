@@ -5,12 +5,15 @@ SHIC_HOST="irc.freenode.net"
 SHIC_PORT=6667
 SHIC_NICK="$USER"
 SHIC_PASS=""
+# Red error, green background for private message, cyan for #archlinux,
+# white for conversations in and out, and gray for everything else
 SHIC_PREFIX=(
-    "\e[0;31m::^ERROR"
-    "\e[0;32m::(^<[^@]*@[^#])"
-    "\e[0;33m::#archlinux"
-    "\e[0;36m::^<"
-    "\e[0;36m::^->"
+    "\e[31m::^ERROR"
+    "\e[42m\e[30m::(^<[^@]*@[^#])"
+    "\e[36m::#archlinux"
+    "\e[0m::^<"
+    "\e[0m::^->"
+    "\e[1;30m::(.*)"
 )
 
 # Don't exit at Ctrl-C
