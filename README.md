@@ -19,7 +19,7 @@
 * -v : print version info and exit
 
 ## Configuration
-Besides giving `shic` command line options, configuration can be stored in a separate file, and read with the -c option. `shic` `source`:s this file, so it must be valid BASH.
+Besides giving `shic` command line options, configuration can be stored in `~/.shicrc`, `$XDG_CONFIG_HOME/shic/shicrc`, or a separate file and specified with the -c option. `shic` `source`:s these file, so they must be valid BASH. 
 
 Below is and example of a valid configuration file, here set with the defaults
 

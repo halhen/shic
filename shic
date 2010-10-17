@@ -19,6 +19,11 @@ SHIC_PREFIX=(
     "\e[1;30m::(.*)"
 )
 
+# Read config files
+[[ -r "$HOME/.shicrc" ]] && source "$HOME/.shicrc"
+_xdgconf="${XDG_CONFIG_HOME:-$HOME/.config}/shic/shicrc"
+[[ -r "$_xdgconf" ]] && source "$_xdgconf"
+
 # Don't exit at Ctrl-C
 trap "echo" SIGINT
 
