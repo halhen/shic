@@ -81,8 +81,10 @@ It is public domain. Do what you want with it, no warranties. And don't feed the
 ### shic doesn't do X, like Y does
 Nope. But Y isn't 100-ish lines of BASH, including configuration and input. However, let me know if you have an idea.
 
-### Chat messages destroy my input when I write
-Yes, they do. If you know of a BASH way to solve this in few lines of code, let me know.
+### Chat messages overwrite my input
+Yes, they do. If you know of a BASH way to solve this in few lines of code, let me know. All hope is not lost, though. shic uses the readline library, so you can use the same keybindings as in bash. Put the following line in your `~/.inputrc` and press Ctrl+L to redraw your current line.
+
+    "\C-l":redraw-current-line
 
 ### Your BASH skills suck. You should use X instead of Y
 Yes. I'm only now moving from beginner to not-as-much-beginner in shell scripting. If X is a better way to do Y in BASH, I'm happy to be taught.
