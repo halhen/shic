@@ -124,6 +124,6 @@ for _cmd in "${C[@]}"; do
 done
 
 # Handle input
-while read line; do
+while read -e line; do
     _input "$line"
 done
