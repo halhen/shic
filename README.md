@@ -19,7 +19,13 @@
 * -v : print version info and exit
 
 ## Configuration
-Besides giving `shic` command line options, configuration can be stored in `~/.shicrc`, `$XDG_CONFIG_HOME/shic/shicrc`, or a separate file and specified with the -c option. `shic` `source`:s these file, so they must be valid BASH. 
+Besides giving `shic` command line options, configuration can be stored in `~/.shicrc`, `$XDG_CONFIG_HOME/shic/shicrc`, or a separate file and specified with the -c option. `shic` `source`:s these file, so they must be valid BASH. Variables can also be set in the environment, e.g. through `export SHIC_NICK="mynick"` in e.g. `~/.bashrc`. Precedence for configuration, i.e. which setting counts if there are many, is from lower to higher:
+
+  * Defaults (see below)
+  * Environment
+  * `~/.shicrc`
+  * `~/.config/shic/shicrc`
+  * Command line options, including configuration files, in order left to right
 
 Below is and example of a valid configuration file, here set with the defaults
 

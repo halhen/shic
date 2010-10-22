@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # Defaults
-SHIC_HOST="irc.freenode.net"
-SHIC_PORT=6667
-SHIC_NICK="$USER"
-SHIC_PASS=""
+[[ -z $SHIC_HOST ]] && SHIC_HOST="irc.freenode.net"
+[[ -z $SHIC_PORT ]] && SHIC_PORT=6667
+[[ -z $SHIC_NICK ]] && SHIC_NICK="$USER"
+[[ -z $SHIC_PASS ]] && SHIC_PASS=""
 # Automatically execute these inputs at startup, separated by ;
 # e.g: SHIC_SCRIPT=":j #archlinux; Heya all!; :s;
-SHIC_SCRIPT=""
+[[ -z $SHIC_SCRIPT ]] && SHIC_SCRIPT=""
 # Red error, green background for private message, cyan for #archlinux,
 # white for conversations in and out, and gray for everything else
-SHIC_PREFIX=(
+[[ -z $SHIC_PREFIX ]] && SHIC_PREFIX=(
     "\e[31m::^ERROR"
     "\e[42m\e[30m::(^<[^@]*@[^#])"
     "\e[36m::#archlinux"
