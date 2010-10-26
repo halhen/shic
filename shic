@@ -32,7 +32,7 @@ trap "kill 0" EXIT
 
 # Send raw message to server
 function _send() {
-    echo -e "$@\r\n" >&3
+    printf "%s\r\n" "$*" >&3
 }
 
 # Print for user
@@ -42,7 +42,7 @@ function _output() {
         [[ "$@" =~ ${rule#*::} ]] && _prefix="${rule%%::*}$_prefix"
     done
 
-    echo -e "$_prefix$@\e[0m"
+    printf "$_prefix%s\e[0m\n" "$*"
 }
 
 # Handle user input
@@ -74,13 +74,13 @@ function _input() {
 # Parse command line
 while getopts "h:p:n:k:c:v" flag; do
     case $flag in
-        v) echo -e "shic v. 0.1, by halhen. Released to the public domain.\nSee http://github.com/halhen/shic for help."; exit;;
+        v) printf "shic v. 0.1, by halhen. Released to the public domain.\nSee http://github.com/halhen/shic for help.\n"; exit;;
         h) SHIC_HOST="$OPTARG";;
         p) SHIC_PORT="$OPTARG";;
         n) SHIC_NICK="$OPTARG";;
         k) SHIC_PASS="$OPTARG";;
         c) source "$OPTARG";;
-        ?) echo "Unknown option. Usage: $0 [-h hostname] [-p port] [-n nick] [-k password] [-c configfile] [-v]" >&2; exit 1;;
+        ?) printf "Unknown option. Usage: $0 [-h hostname] [-p port] [-n nick] [-k password] [-c configfile] [-v]\n" >&2; exit 1;;
     esac
 done
 
@@ -115,7 +115,7 @@ exec 3<>/dev/tcp/$SHIC_HOST/$SHIC_PORT || exit 1
 _send "NICK $SHIC_NICK"
 _send "USER $SHIC_NICK localhost $SHIC_HOST :$SHIC_NICK"
 
-function _trim() { echo $1; }
+function _trim() { printf "%s" $1; }
 
 # Execute login script
 IFS=";" read -ra C <<< "$SHIC_SCRIPT"
