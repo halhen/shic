@@ -115,7 +115,7 @@ exec 3<>/dev/tcp/$SHIC_HOST/$SHIC_PORT || exit 1
 _send "NICK $SHIC_NICK"
 _send "USER $SHIC_NICK localhost $SHIC_HOST :$SHIC_NICK"
 
-function _trim() { printf "%s" $1; }
+function _trim() { echo $1; }
 
 # Execute login script
 IFS=";" read -ra C <<< "$SHIC_SCRIPT"
