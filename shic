@@ -43,6 +43,7 @@ function _output() {
     done
 
     printf "$_prefix%s\e[0m\n" "$*"
+    printf "$_prefix%s\e[0m\n" "$*" >> log.txt
 }
 
 # Handle user input
