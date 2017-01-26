@@ -5,6 +5,8 @@
 [[ -z $SHIC_PORT ]] && SHIC_PORT=6667
 [[ -z $SHIC_NICK ]] && SHIC_NICK="$USER"
 [[ -z $SHIC_PASS ]] && SHIC_PASS=""
+[[ -z $SHIC_LOG ]] && SHIC_LOG="no"
+
 # Automatically execute these inputs at startup, separated by ;
 # e.g: SHIC_SCRIPT=":j #archlinux; Heya all!; :s;
 [[ -z $SHIC_SCRIPT ]] && SHIC_SCRIPT=""
@@ -43,6 +45,10 @@ function _output() {
     done
 
     printf "$_prefix%s\e[0m\n" "$*"
+
+    if [[ "$SHIC_LOG" == "yes" ]]; then
+        printf "$_prefix%s\e[0m\n" "$*" >> log.txt
+    fi
 }
 
 # Handle user input
@@ -72,15 +78,16 @@ function _input() {
 }
 
 # Parse command line
-while getopts "h:p:n:k:c:v" flag; do
+while getopts "h:p:n:k:c:v:l" flag; do
     case $flag in
         v) printf "shic v. 0.1, by halhen. Released to the public domain.\nSee http://github.com/halhen/shic for help.\n"; exit;;
         h) SHIC_HOST="$OPTARG";;
         p) SHIC_PORT="$OPTARG";;
         n) SHIC_NICK="$OPTARG";;
         k) SHIC_PASS="$OPTARG";;
+	l) SHIC_PASS="$OPTARG";;
         c) source "$OPTARG";;
-        ?) printf "Unknown option. Usage: $0 [-h hostname] [-p port] [-n nick] [-k password] [-c configfile] [-v]\n" >&2; exit 1;;
+        ?) printf "Unknown option. Usage: $0 [-h hostname] [-p port] [-n nick] [-k password] [-c configfile] [-l yes] [-v]\n" >&2; exit 1;;
     esac
 done
 
